@@ -7,7 +7,7 @@ import java.util.*;
 public class MarkovChain<L,S> {
     private LinkedHashMap<L, HashMap<Optional<S>, Histogram<S>>> label2symbol2symbol = new LinkedHashMap<>();
 
-    public Set<L> allLabels() {return label2symbol2symbol.keySet();}
+    public Set<L> allLabels() {return label2symbol2symbol.keySet();}  
 
     @Override
     public String toString() {
@@ -61,27 +61,16 @@ public class MarkovChain<L,S> {
         double new_portion;
         System.out.println(label2symbol2symbol);
         System.out.println(label);
-        S prev = null;
+        Optional<S> prev = Optional.empty();
         for (S symbol: sequence) {
-            System.out.println(prev);
-            System.out.println(symbol);
-            if (prev == null) {
-                System.out.println("null");
-                prev = symbol;
-            }
-            else if (label2symbol2symbol.get(label).get(Optional.of(prev)) == null) {
-                System.out.println("null");
-                prev = symbol;
-            }
-            else {
-                numerator = label2symbol2symbol.get(label).get(Optional.of(prev)).getCountFor(symbol) + 1;
+            if (label2symbol2symbol.get(label).containsKey(prev)) {
+                numerator = label2symbol2symbol.get(label).get(prev).getCountFor(symbol) + 1;
                 System.out.println(numerator);
-                denominator = label2symbol2symbol.get(label).get(Optional.of(prev)).getTotalCounts() + 1;
+                denominator = label2symbol2symbol.get(label).get(prev).getTotalCounts() + 1;
                 System.out.println(denominator);
                 new_portion = numerator / denominator;
-                portion *= new_portion;
-                prev = symbol;
-            }
+                portion *= new_portion; }
+            prev = Optional.of(symbol);
         }
         System.out.println(portion);
         return portion;
