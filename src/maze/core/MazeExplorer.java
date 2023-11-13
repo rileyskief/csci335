@@ -1,11 +1,11 @@
 package maze.core;
 
+import core.Pos;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
-
-import core.Pos;
 
 public class MazeExplorer {
 	private Maze m;
@@ -43,8 +43,27 @@ public class MazeExplorer {
 	public ArrayList<MazeExplorer> getSuccessors() {
 		ArrayList<MazeExplorer> result = new ArrayList<MazeExplorer>();
 		// TODO: It should add as a successor every adjacent, unblocked neighbor square.
-		// I added a comment for demonstration purposes.
-        return result;
+		ArrayList<Pos> neighbor_list = getLocation().getNeighbors();
+//		System.out.println("Treasure locations: " + m.getTreasures());
+//		System.out.println(neighbor_list);
+		for (Pos neighbor: neighbor_list) {
+			if (!m.blocked(getLocation(), neighbor)) {
+//				System.out.println("Neighbor: " + neighbor);
+				MazeExplorer explorer = new MazeExplorer(m, neighbor);
+				result.add(explorer);
+				for (Pos treasure: m.getTreasures()) {
+					if (neighbor.equals(treasure)) {
+						explorer.treasureFound.add(treasure);
+//						System.out.println("Treasure should be added -----------------" + treasure);
+						//its working, but now the treasure needs to be added to each successor explorer
+					}
+				}
+				explorer.addTreasures(treasureFound);
+//				System.out.println("Treasures found: " + explorer.getAllTreasureFound());
+			}
+		}
+//		System.out.println(m.getGoal());
+		return result;
 	}
 	
 	public void addTreasures(Collection<Pos> treasures) {
