@@ -1,11 +1,12 @@
 package maze.core;
 
-import core.Pos;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
+
+import core.Direction;
+import core.Pos;
 
 public class MazeExplorer {
 	private Maze m;
@@ -63,7 +64,8 @@ public class MazeExplorer {
 			}
 		}
 //		System.out.println(m.getGoal());
-		return result;
+		// I added a comment for demonstration purposes.
+        return result;
 	}
 	
 	public void addTreasures(Collection<Pos> treasures) {
